@@ -31,13 +31,14 @@
               id="imagePath"
               formControlName="imagePath"
               class="form-control"
-              #imagePath>
+              #imagePath
+              (input)="onImageUrlChanged($event)">
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <img [src]="imagePath.value" class="img-responsive">
+          <img [src]="imagePath.value" class="img-responsive img-thumbnail">
         </div>
       </div>
       <div class="row">
@@ -53,8 +54,20 @@
           </div>
         </div>
       </div>
+      <div *ngIf="predictedIngr" class="row chips">
+          <div class="col-xs-12">
+            <div class="md-chips">
+                <div *ngFor="let ingr of predictedIngr;let i = index"
+                  class="md-chip md-chip-hover"
+                  (click)="onChipClick(i)">
+                  {{ingr.name}}
+                </div>
+            </div>
+          </div>
+      </div>
       <div class="row">
         <div class="col-xs-12" formArrayName="ingredients">
+          <label>Select from predicted ingredients above or enter your own</label>
           <div
             class="row"
             *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index"

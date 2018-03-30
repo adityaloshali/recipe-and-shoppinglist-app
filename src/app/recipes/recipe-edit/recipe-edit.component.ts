@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import * as Clarifai from 'clarifai';
 
 import { RecipeService } from '../recipe.service';
 
@@ -13,6 +14,12 @@ export class RecipeEditComponent implements OnInit {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
+  imgUrl: string;
+  predictedIngr:Array<any>;
+  API_KEY = 'f50e84e71857491c8439cf56edd21a15';
+  appC = new Clarifai.App({
+    apiKey: this.API_KEY
+   });
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -26,8 +33,49 @@ export class RecipeEditComponent implements OnInit {
           this.id = +params['id'];
           this.editMode = params['id'] != null;
           this.initForm();
+          // if (this.editMode) {
+          //   const recipe = this.recipeService.getRecipe(this.id);
+          //   this.predictIngredients(recipe.imagePath);
+          //   console.log(recipe.imagePath);
+          // }
+          this.predictIngredients("hello");
         }
       );
+  }
+
+  onImageUrlChanged(event: Event){
+    this.imgUrl = (<HTMLInputElement>event.target).value;
+    console.log(this.imgUrl);
+    this.predictIngredients(this.imgUrl);
+  }
+
+  onChipClick(i:number){
+    console.log(i);
+    (<FormArray>this.recipeForm.get('ingredients')).push(
+      new FormGroup({
+        'name': new FormControl(this.predictedIngr[i].name, Validators.required),
+        'amount': new FormControl(null, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/)
+        ])
+      })
+    );
+  }
+
+  async predictIngredients(imgUrl:string){
+     const recipe = this.recipeService.getRecipe(this.id); 
+     let response = await this.appC.models.predict(Clarifai.FOOD_MODEL, recipe.imagePath);
+        // do something with response
+      if(response){
+        console.log(response.outputs[0].data.concepts);
+        let result = response.outputs[0].data.concepts;
+        // result.map( obj => {
+        //   console.log(obj);
+        // });
+        //console.log(this);
+        this.predictedIngr = result;
+        console.log(this.predictedIngr);
+    }
   }
 
   onSubmit() {
@@ -54,6 +102,7 @@ export class RecipeEditComponent implements OnInit {
         ])
       })
     );
+    //console.log("Predicted: "+this.predictedIngr);
   }
 
   onDeleteIngredient(index: number) {

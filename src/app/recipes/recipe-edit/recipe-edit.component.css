@@ -2,3 +2,41 @@ input.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched {
   border: 1px solid red;
 }
+
+/* div.chip{
+  display: inline;
+  background-color: antiquewhite;
+  padding: 2px 6px;
+  border: 1px transparent;
+  border-radius: 15px;
+  box-shadow: 1px 1px thistle;
+  margin: 20px 4px;
+}
+
+.chips{
+  margin-bottom: 5px;
+  display: flex;
+  flex-wrap: wrap;
+} */
+
+.md-chip {
+  display: inline-block;
+  background: #e0e0e0;
+  padding: 0 12px;
+  border-radius: 32px;
+  font-size: 13px;
+}
+.md-chip.md-chip-hover:hover {
+  background: #ccc;
+}
+
+.md-chips {
+  padding: 12px 0;
+}
+.md-chips .md-chip {
+  margin: 0 5px 3px 0;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
