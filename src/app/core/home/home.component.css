@@ -1,0 +1,20 @@
+.main{
+    background-image: url("https://d2gk7xgygi98cy.cloudfront.net/93-3-large.jpg");
+    background-size: cover;
+    width: 100%;
+    height: 90vh;
+    margin: 0;
+    margin-top: -10px;
+    text-align: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 50px;
+    color: beige;
+    text-shadow: 1px 1px black;
+}
